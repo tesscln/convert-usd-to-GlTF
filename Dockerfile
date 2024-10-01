@@ -1,23 +1,30 @@
-# Use an official Blender image as a base
-FROM blender:3.3.0
+# Use Ubuntu as a base image
+FROM ubuntu:20.04
 
-# Install pip and other necessary Python packages
-RUN apt-get update && apt-get install -y python3-pip && \
-    pip3 install --no-cache-dir streamlit
+# Install necessary dependencies for Blender
+RUN apt-get update && apt-get install -y wget sudo libglu1-mesa libxi6 libxrender1 libpulse0
 
-# Copy the local app and conversion scripts to the container
+# Download Blender 3.6
+RUN wget https://download.blender.org/release/Blender3.6/blender-3.6.0-linux-x64.tar.xz && \
+    tar -xvf blender-3.6.0-linux-x64.tar.xz && \
+    mv blender-3.6.0-linux-x64 /opt/blender
+
+# Set Blender executable in PATH
+ENV PATH="/opt/blender:$PATH"
+
+# Install pip and Streamlit
+RUN apt-get install -y python3-pip && pip3 install --no-cache-dir streamlit
+
+# Copy your app files
 COPY app.py /usr/src/app/app.py
 COPY usd-to-glb.py /usr/src/app/usd-to-glb.py
 COPY usd-to-gltf.py /usr/src/app/usd-to-gltf.py
 
-# Create a directory for storing temporary files
-RUN mkdir -p /usr/src/app/temp
-
 # Set the working directory
 WORKDIR /usr/src/app
 
-# Expose Streamlit's default port (8501)
+# Expose port 8501 for Streamlit
 EXPOSE 8501
 
-# Command to run the Streamlit app
+# Run the Streamlit app
 CMD ["streamlit", "run", "app.py", "--server.enableCORS=false", "--server.port=8501"]
