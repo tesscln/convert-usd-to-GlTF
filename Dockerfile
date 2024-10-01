@@ -1,8 +1,8 @@
 # Use Ubuntu as a base image
 FROM ubuntu:20.04
 
-# Install necessary dependencies for Blender
-RUN apt-get update && apt-get install -y wget sudo libglu1-mesa libxi6 libxrender1 libpulse0
+# Install necessary dependencies for Blender and xz-utils for extracting .tar.xz files
+RUN apt-get update && apt-get install -y wget sudo libglu1-mesa libxi6 libxrender1 libpulse0 xz-utils
 
 # Download Blender 3.6
 RUN wget https://download.blender.org/release/Blender3.6/blender-3.6.0-linux-x64.tar.xz && \
