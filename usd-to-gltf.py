@@ -1,6 +1,16 @@
 import bpy
+import sys
+
+def clear_scene():
+    # Deselect all objects
+    bpy.ops.object.select_all(action='DESELECT')
+
+    # Select all objects and delete them
+    bpy.ops.object.select_by_type(type='MESH')
+    bpy.ops.object.delete()
 
 def convert_usd_to_gltf(input_usd, output_gltf):
+    clear_scene()  # Clear the scene before importing the new file
     
     bpy.ops.wm.read_factory_settings(use_empty=True)
 
@@ -10,7 +20,9 @@ def convert_usd_to_gltf(input_usd, output_gltf):
     # Exporting to .gltf
     bpy.ops.export_scene.gltf(filepath=output_gltf, export_format='GLB')
 
-# Example usage
-input_usd = '/Users/tessclln/Desktop/project/RC/Assets/_Class1RC.usd'
-output_gltf = '/Users/tessclln/Desktop/project/RC/Assets/_Class1RC-try.glb'
-convert_usd_to_gltf(input_usd, output_gltf)
+# Allow the script to be called with command-line arguments
+if __name__ == "__main__":
+    input_usd = sys.argv[-2]  # Second-to-last argument
+    output_gltf = sys.argv[-1]  # Last argument
+
+    convert_usd_to_gltf(input_usd, output_gltf)
