@@ -1,5 +1,5 @@
 # Use an official Blender image as a base
-FROM blender:3.6.0
+FROM blender:3.3.0
 
 # Install pip and other necessary Python packages
 RUN apt-get update && apt-get install -y python3-pip && \
