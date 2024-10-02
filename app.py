@@ -2,44 +2,43 @@ import streamlit as st
 import os
 import subprocess
 
-# Create a temporary directory if it doesn't exist
-temp_dir = "./temp"
-if not os.path.exists(temp_dir):
-    os.makedirs(temp_dir)
+# Create a temporary directory to save uploaded files
+TEMP_DIR = './temp'
+if not os.path.exists(TEMP_DIR):
+    os.makedirs(TEMP_DIR)
 
-# File uploader widget
-uploaded_file = st.file_uploader("Upload your USD file", type=["usd"])
+st.title("USD to GLB/GLTF Converter")
+
+# File uploader
+uploaded_file = st.file_uploader("Upload a .usd file", type=["usd"])
 
 if uploaded_file is not None:
-    # Display file information
-    st.write(f"File uploaded:\n\n{{\n\"filename\":\"{uploaded_file.name}\"\n\"filetype\":\"{uploaded_file.type}\"\n\"filesize\":{uploaded_file.size}\n}}")
-
-    # Save the uploaded file to the temporary directory
-    input_path = os.path.join(temp_dir, uploaded_file.name)
+    file_path = os.path.join(TEMP_DIR, uploaded_file.name)
     
-    # Write the uploaded file to disk
-    with open(input_path, "wb") as f:
+    # Save the uploaded file
+    with open(file_path, "wb") as f:
         f.write(uploaded_file.getbuffer())
     
-    st.success(f"File successfully saved to {input_path}")
-
-    # Ask user to choose the output format
-    option = st.selectbox("Choose conversion format", ("GLB", "GLTF"))
-
-    # Set the output path
-    output_file_name = os.path.splitext(uploaded_file.name)[0]  # Remove the extension
-    if option == "GLB":
-        output_path = os.path.join(temp_dir, f"{output_file_name}.glb")
-        conversion_script = "usd-to-glb.py"
-    else:
-        output_path = os.path.join(temp_dir, f"{output_file_name}.gltf")
-        conversion_script = "usd-to-gltf.py"
+    st.success(f"File successfully saved to {file_path}")
     
-    st.write(f"Converting {uploaded_file.name} to {option}...")
+    # Choose the conversion format
+    conversion_format = st.selectbox("Choose conversion format", ["GLB", "GLTF"])
+    
+    # Button to trigger the conversion
+    if st.button("Convert"):
+        st.write(f"Converting {uploaded_file.name} to {conversion_format}...")
 
-    # Run the conversion script
-    try:
-        subprocess.run(["blender", "--background", "--python", conversion_script, "--", input_path, output_path], check=True)
-        st.success(f"Conversion successful! File saved as {output_path}")
-    except subprocess.CalledProcessError as e:
-        st.error(f"Error during conversion: {e}")
+        # Set the output file path based on the chosen format
+        if conversion_format == "GLB":
+            output_file = os.path.join(TEMP_DIR, f"{os.path.splitext(uploaded_file.name)[0]}.glb")
+            command = ['blender', '--background', '--python', 'usd-to-glb.py', '--', file_path, output_file]
+        else:
+            output_file = os.path.join(TEMP_DIR, f"{os.path.splitext(uploaded_file.name)[0]}.gltf")
+            command = ['blender', '--background', '--python', 'usd-to-gltf.py', '--', file_path, output_file]
+        
+        try:
+            # Run the Blender command to perform the conversion
+            subprocess.run(command, check=True)
+            st.success(f"Conversion successful! File saved as {output_file}")
+        except subprocess.CalledProcessError as e:
+            st.error(f"Error during conversion: {e}")
