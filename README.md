@@ -1,8 +1,6 @@
 # USD to GLB/GLTF Converter
 ## Convert your .usd file to .gltf or .glb
 
-# USD to GLB/GLTF Converter App
-
 This Streamlit app allows users to upload `.usd` files and convert them to `.glb` or `.gltf` formats using Blender.
 
 ## Prerequisites
@@ -21,7 +19,7 @@ This Streamlit app allows users to upload `.usd` files and convert them to `.glb
 
 ### Step 1: Clone the Repository
 ```bash
-git clone https://github.com/yourusername/convert-usd-to-GlTF.git
+git clone https://github.com/tesscln/convert-usd-to-GlTF.git
 cd convert-usd-to-GlTF
 ```
 
@@ -72,9 +70,11 @@ Modifying the Conversion Script for **GLTF** from **separate** to **embedded**.
 3. Then in your terminal, run:
 
 ```bash
-    git add usd-to-gltf.py"
+    git add usd-to-gltf.py
     git commit -m "Modified usd-to-gltf.py to convert the file to an embedded one"
 ```
+
+---
 
 ### Troubleshooting
 
@@ -83,3 +83,9 @@ If you encounter any issues, here are some common troubleshooting tips:
 - **Blender Not Found**: If the app can't find Blender, ensure that it's installed and accessible via the command line. You may need to add Blender to your **system's PATH**.
 
 - **Missing Dependencies**: If you run into missing dependency errors, make sure to install all required Python packages.
+
+---
+
+### Contributing
+
+Feel free to submit issues or pull requests to improve this application!
