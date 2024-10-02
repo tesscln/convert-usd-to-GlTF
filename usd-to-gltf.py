@@ -18,7 +18,7 @@ def convert_usd_to_gltf(input_usd, output_gltf):
     bpy.ops.wm.usd_import(filepath=input_usd)
 
     # Exporting to .gltf (not .glb)
-    bpy.ops.export_scene.gltf(filepath=output_gltf, export_format='GLTF_SEPARATE')  # For .gltf format
+    bpy.ops.export_scene.gltf(filepath=output_gltf, export_format='GLTF_SEPARATE')  # or export_format='GLTF_EMBEDDED'
 
 # Allow the script to be called with command-line arguments
 if __name__ == "__main__":
